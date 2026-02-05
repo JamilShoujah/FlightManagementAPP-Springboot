@@ -1,0 +1,19 @@
+spring:
+  profiles: dev
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/flightdb}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # auto-create/update schema locally
+    show-sql: true # show SQL queries for debugging
+    properties:
+      hibernate:
+        format_sql: true # nicely formatted SQL logs
+
+server:
+  port: ${SERVER_PORT:8080} # default local dev port
