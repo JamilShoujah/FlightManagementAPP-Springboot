@@ -123,3 +123,47 @@ java -jar target/FlightFoodService-0.0.1-SNAPSHOT.jar
 - Do **not commit `.env.local.sh`** — secrets should stay local.
 - Commit `env.example.sh` so new devs can quickly set up.
 - Profiles (`dev`, `prod`) allow **different DBs, ports, or logging**.
+
+## API Endpoints
+
+### Flights
+
+| Method | Endpoint        | Description               | Request Body  |
+| ------ | --------------- | ------------------------- | ------------- |
+| GET    | `/flights`      | Get all flights           | None          |
+| GET    | `/flights/{id}` | Get a flight by ID        | None          |
+| POST   | `/flights`      | Create a new flight       | `Flight` JSON |
+| PUT    | `/flights/{id}` | Update an existing flight | `Flight` JSON |
+| DELETE | `/flights/{id}` | Delete a flight by ID     | None          |
+
+---
+
+### Orders
+
+| Method | Endpoint       | Description           | Request Body       |
+| ------ | -------------- | --------------------- | ------------------ |
+| GET    | `/orders`      | Get all orders        | None               |
+| GET    | `/orders/{id}` | Get an order by ID    | None               |
+| POST   | `/orders`      | Create a new order    | `FlightOrder` JSON |
+| DELETE | `/orders/{id}` | Delete an order by ID | None               |
+
+---
+
+### Food Options
+
+| Method | Endpoint             | Description                | Request Body      |
+| ------ | -------------------- | -------------------------- | ----------------- |
+| GET    | `/food-options`      | Get all food options       | None              |
+| GET    | `/food-options/{id}` | Get a food option by ID    | None              |
+| POST   | `/food-options`      | Create a new food option   | `FoodOption` JSON |
+| DELETE | `/food-options/{id}` | Delete a food option by ID | None              |
+
+---
+
+### Ordered Food Items
+
+| Method | Endpoint              | Description                       | Request Body           |
+| ------ | --------------------- | --------------------------------- | ---------------------- |
+| GET    | `/ordered-items`      | Get all ordered food items        | None                   |
+| POST   | `/ordered-items`      | Create a new ordered food item    | `OrderedFoodItem` JSON |
+| DELETE | `/ordered-items/{id}` | Delete an ordered food item by ID | None                   |
