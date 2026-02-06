@@ -1,10 +1,12 @@
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev # correct Spring 4 way to activate profile
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/flightdb}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:password}
+    url: ${DB_URL} # read from environment
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,4 +18,4 @@ spring:
         format_sql: true # nicely formatted SQL logs
 
 server:
-  port: ${SERVER_PORT:8080} # default local dev port
+  port: ${SERVER_PORT:8080} # fallback if env var not set
