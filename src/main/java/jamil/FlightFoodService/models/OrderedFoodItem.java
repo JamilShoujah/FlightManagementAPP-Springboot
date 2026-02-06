@@ -1,5 +1,6 @@
 package jamil.FlightFoodService.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class OrderedFoodItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private FlightOrder order;
 
     @Column(name = "food_id", nullable = false)
