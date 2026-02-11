@@ -19,26 +19,27 @@ public class FlightOrderService {
         this.flightOrderRepository = flightOrderRepository;
     }
 
+    // Get all orders
     public List<FlightOrder> getAllOrders() {
         return flightOrderRepository.findAll();
     }
 
+    // Get order by ID
     public Optional<FlightOrder> getOrderById(Long id) {
         return flightOrderRepository.findById(id);
     }
 
+    // Save or update an order
     public FlightOrder saveOrder(FlightOrder order) {
-        // Ensure lastUpdated is set
         if (order.getLastUpdated() == null) {
             order.setLastUpdated(LocalDateTime.now());
         }
 
-        // Ensure itemsRequested is initialized
         if (order.getItemsRequested() == null) {
             order.setItemsRequested(new ArrayList<>());
         }
 
-        // Link each OrderedFoodItem to its parent order
+        // Link each item to parent order
         for (OrderedFoodItem item : order.getItemsRequested()) {
             item.setOrder(order);
         }
@@ -46,6 +47,7 @@ public class FlightOrderService {
         return flightOrderRepository.save(order);
     }
 
+    // Delete order by ID
     public void deleteOrder(Long id) {
         flightOrderRepository.deleteById(id);
     }

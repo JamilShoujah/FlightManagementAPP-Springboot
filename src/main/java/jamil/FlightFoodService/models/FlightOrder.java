@@ -2,6 +2,7 @@ package jamil.FlightFoodService.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty; // make sure this import exists
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,4 +35,8 @@ public class FlightOrder {
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated = LocalDateTime.now();
 
+    @JsonProperty("flightId")
+    public Long getFlightId() {
+        return flight != null ? flight.getId() : null;
+    }
 }
