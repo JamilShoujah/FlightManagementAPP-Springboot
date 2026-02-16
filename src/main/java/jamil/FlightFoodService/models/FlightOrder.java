@@ -2,7 +2,7 @@ package jamil.FlightFoodService.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty; // make sure this import exists
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +22,7 @@ public class FlightOrder {
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
+    @JsonBackReference
     private Flight flight;
 
     @Column(nullable = false)
@@ -37,5 +38,19 @@ public class FlightOrder {
     @JsonProperty("flightId")
     public Long getFlightId() {
         return flight != null ? flight.getId() : null;
+    }
+
+    @JsonProperty("flightId")
+    public void setFlightId(Long flightId) {
+        if (flightId == null) {
+            this.flight = null;
+            return;
+        }
+
+        if (this.flight == null) {
+            this.flight = new Flight();
+        }
+
+        this.flight.setId(flightId);
     }
 }
