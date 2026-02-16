@@ -36,8 +36,13 @@ public class FlightOrderController {
     // POST create new order
     @PostMapping
     public FlightOrder createOrder(@RequestBody FlightOrder order) {
+        // We must link each item to this order so Hibernate knows 
+        // which order_id to put in the food items table.
+        if (order.getItemsRequested() != null) {
+            order.getItemsRequested().forEach(item -> item.setOrder(order));
+        }
         return orderService.saveOrder(order);
-    }
+}
 
     // PUT update existing order
     @PutMapping("/{id}")

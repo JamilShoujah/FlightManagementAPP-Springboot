@@ -22,7 +22,6 @@ public class FlightOrder {
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
-    @JsonBackReference
     private Flight flight;
 
     @Column(nullable = false)
