@@ -1,10 +1,12 @@
 package jamil.FlightFoodService.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -43,4 +45,8 @@ public class Flight {
 
     @Column(name = "food_requested", nullable = false)
     private Boolean foodRequested;
+
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<FlightOrder> orders;
 }

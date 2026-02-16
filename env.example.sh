@@ -4,3 +4,5 @@ export DB_USER=your_db_user
 export DB_PASSWORD=your_db_password
 export SPRING_PROFILES_ACTIVE=dev
 export SERVER_PORT=8080
+
+mvn spring-boot:run
