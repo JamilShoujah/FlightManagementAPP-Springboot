@@ -28,7 +28,7 @@ public class FlightOrder {
     @Column(nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderedFoodItem> itemsRequested;
 

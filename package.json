@@ -1,0 +1,8 @@
+{
+  "name": "flight-food-service-backend",
+  "private": true,
+  "scripts": {
+    "docker:up": "./scripts/docker-compose.sh",
+    "docker:down": "./scripts/docker-compose.sh --down"
+  }
+}

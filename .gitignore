@@ -31,8 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+node_modules/
 
 # Env files
-env.local.sh
 .env
-
+env.prod.sh

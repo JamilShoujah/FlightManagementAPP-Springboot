@@ -2,127 +2,107 @@
 
 Spring Boot backend for the FlightFoodService application.
 
----
+## Prerequisites
 
-## **Project Structure**
+- Docker Desktop (or Docker Engine + Docker Compose plugin)
+- Java 21+ and Maven 3.8+ (only needed when running outside Docker)
 
-```
+## Environment Files
 
-FlightFoodService/
-├── env.example.sh       # Template for environment variables (committed)
-├── env.local.sh         # Real secrets (ignored)
-├── src/
-│   ├── main/
-│   │   ├── java/        # Java source code
-│   │   └── resources/
-│   │       ├── application.yml
-│   │       ├── application-dev.yml
-│   │       └── application-prod.yml
-│   └── test/            # Unit & integration tests
-├── pom.xml
-└── README.md
-
-```
-
----
-
-## **Prerequisites**
-
-- Java 21+
-- Maven 3.8+
-- PostgreSQL database
-- Git
-
----
-
-## **Setup Environment Variables**
-
-1. Copy the template `env` file:
+Use the committed env files directly and edit values as needed.
 
 ```bash
-cp env.example.sh env.local.sh
+vi .env.local
+vi .env.prod
 ```
 
-2. Edit `env.local.sh` with your **local database credentials**:
+### Local testing variables (`.env.local`)
+
+```dotenv
+SPRING_PROFILES_ACTIVE=dev
+SERVER_PORT=8080
+POSTGRES_DB=flightsdb
+POSTGRES_USER=flight_user
+POSTGRES_PASSWORD=flight_password
+POSTGRES_PORT=5432
+```
+
+### Production / OCI variables (`.env.prod`)
+
+```dotenv
+SPRING_PROFILES_ACTIVE=prod
+SERVER_PORT=8080
+DB_URL=jdbc:postgresql://<oci-postgres-host>:5432/<database_name>?sslmode=require
+DB_USER=<db_user>
+DB_PASSWORD=<db_password>
+JPA_DDL_AUTO=validate
+```
+
+## Run with Docker Compose
+
+### Simple commands
 
 ```bash
-export DB_URL=jdbc:postgresql://localhost:5432/flightsdb
-export DB_USER=jamilshoujah
-export DB_PASSWORD=Jamil12345
-export SPRING_PROFILES_ACTIVE=dev
-export SERVER_PORT=8080
+npm run docker:up -- --env=dev
+npm run docker:down -- --env=dev
+npm run docker:up -- --env=prod
+npm run docker:down -- --env=prod
 ```
 
-3. Load the environment variables into your shell:
+Optional flags:
+
+- `--foreground` to run attached
+- `--no-build` to skip image rebuild
+- `--volumes` (only with `docker:down`) to remove DB volume
+
+### Local testing (backend + PostgreSQL)
+
+```bash
+docker compose --env-file .env.local up --build
+```
+
+Backend URL: `http://localhost:8080`
+
+## Seed Data (2026)
+
+- Seed script: `db/seed_2026.sql`
+- The script is auto-applied only when Postgres initializes a brand-new volume.
+
+Reseed an already-running local DB:
+
+```bash
+docker compose --env-file .env.local exec -T db \
+  psql -U flight_user -d flightsdb -v ON_ERROR_STOP=1 -f - < db/seed_2026.sql
+```
+
+Reset containers and force fresh init (will wipe local DB volume):
+
+```bash
+docker compose --env-file .env.local down -v
+docker compose --env-file .env.local up --build
+```
+
+### Production-style run for OCI (backend only, external DB)
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+```
+
+For OCI, set `.env.prod` with your managed PostgreSQL endpoint and credentials.
+
+## Run without Docker
 
 ```bash
 source env.local.sh
+./mvnw spring-boot:run
 ```
 
-> 💡 This ensures sensitive data is **never hardcoded** or committed.
-
----
-
-## **Database Setup**
-
-Make sure PostgreSQL is running and a database exists:
-
-```sql
-CREATE DATABASE flightsdb;
-```
-
-> Spring Boot will automatically create/update tables on startup (`hibernate.ddl-auto=update`).
-
----
-
-## **Running the Backend**
-
-### **Development**
+## Build Jar
 
 ```bash
-# Load environment variables
-source env.local.sh
-
-# Run Spring Boot in dev profile
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-```
-
-- Default port: `8080` (change in `env.local.sh` if needed)
-- SQL logs are printed in the console for debugging.
-
----
-
-### **Production**
-
-```bash
-# Load production environment variables
-source env.prod.sh
-
-# Run Spring Boot in prod profile
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
-```
-
-> Make sure `env.prod.sh` contains production DB credentials.
-
----
-
-## **Build Jar**
-
-```bash
-# Clean and build
-mvn clean package
-
-# Run the jar
+./mvnw clean package
 java -jar target/FlightFoodService-0.0.1-SNAPSHOT.jar
 ```
-
----
-
-## **Notes**
-
-- Do **not commit `.env.local.sh`** — secrets should stay local.
-- Commit `env.example.sh` so new devs can quickly set up.
-- Profiles (`dev`, `prod`) allow **different DBs, ports, or logging**.
 
 ## API Endpoints
 
@@ -136,8 +116,6 @@ java -jar target/FlightFoodService-0.0.1-SNAPSHOT.jar
 | PUT    | `/flights/{id}` | Update an existing flight | `Flight` JSON |
 | DELETE | `/flights/{id}` | Delete a flight by ID     | None          |
 
----
-
 ### Orders
 
 | Method | Endpoint       | Description           | Request Body       |
@@ -147,8 +125,6 @@ java -jar target/FlightFoodService-0.0.1-SNAPSHOT.jar
 | POST   | `/orders`      | Create a new order    | `FlightOrder` JSON |
 | DELETE | `/orders/{id}` | Delete an order by ID | None               |
 
----
-
 ### Food Options
 
 | Method | Endpoint             | Description                | Request Body      |
@@ -157,8 +133,6 @@ java -jar target/FlightFoodService-0.0.1-SNAPSHOT.jar
 | GET    | `/food-options/{id}` | Get a food option by ID    | None              |
 | POST   | `/food-options`      | Create a new food option   | `FoodOption` JSON |
 | DELETE | `/food-options/{id}` | Delete a food option by ID | None              |
-
----
 
 ### Ordered Food Items
 

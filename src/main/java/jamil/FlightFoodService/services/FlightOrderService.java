@@ -4,6 +4,7 @@ import jamil.FlightFoodService.models.FlightOrder;
 import jamil.FlightFoodService.models.OrderedFoodItem;
 import jamil.FlightFoodService.repositories.FlightOrderRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +46,37 @@ public class FlightOrderService {
         }
 
         return flightOrderRepository.save(order);
+    }
+
+    @Transactional
+    public Optional<FlightOrder> updateOrder(Long id, FlightOrder incomingOrder) {
+        return flightOrderRepository.findById(id).map(existingOrder -> {
+            if (incomingOrder.getStatus() != null) {
+                existingOrder.setStatus(incomingOrder.getStatus());
+            }
+            existingOrder.setLastUpdated(LocalDateTime.now());
+
+            if (existingOrder.getItemsRequested() == null) {
+                existingOrder.setItemsRequested(new ArrayList<>());
+            }
+
+            if (incomingOrder.getItemsRequested() == null) {
+                existingOrder.getItemsRequested().clear();
+                return existingOrder;
+            }
+
+            // Replace children atomically to avoid duplicated rows on repeated updates.
+            existingOrder.getItemsRequested().clear();
+            for (OrderedFoodItem incomingItem : incomingOrder.getItemsRequested()) {
+                OrderedFoodItem newItem = new OrderedFoodItem();
+                newItem.setFoodId(incomingItem.getFoodId());
+                newItem.setQuantity(incomingItem.getQuantity());
+                newItem.setOrder(existingOrder);
+                existingOrder.getItemsRequested().add(newItem);
+            }
+
+            return existingOrder;
+        });
     }
 
     // Delete order by ID

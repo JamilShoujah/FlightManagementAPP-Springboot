@@ -1,0 +1,10 @@
+.git
+.gitignore
+target
+.idea
+.vscode
+env.local.sh
+.env.local
+.env.prod
+README.md
+READ.md
