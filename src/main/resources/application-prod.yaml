@@ -9,7 +9,13 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER:oracle.jdbc.OracleDriver}
     hikari:
-      maximum-pool-size: ${DB_POOL_SIZE:10}
+      maximum-pool-size: ${DB_POOL_SIZE:8}
+      minimum-idle: ${DB_POOL_MIN_IDLE:1}
+      connection-timeout: ${DB_CONN_TIMEOUT_MS:10000}
+      validation-timeout: ${DB_VALIDATION_TIMEOUT_MS:5000}
+      idle-timeout: ${DB_IDLE_TIMEOUT_MS:300000}
+      max-lifetime: ${DB_MAX_LIFETIME_MS:840000}
+      keepalive-time: ${DB_KEEPALIVE_TIME_MS:120000}
 
   jpa:
     hibernate:

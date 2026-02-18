@@ -1,6 +1,7 @@
 package jamil.FlightFoodService.controllers;
 
 import jamil.FlightFoodService.models.Flight;
+import jamil.FlightFoodService.dto.FlightResponse;
 import jamil.FlightFoodService.services.FlightService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,13 @@ public class FlightController {
 
     // Get all flights
     @GetMapping
-    public List<Flight> getAllFlights() {
+    public List<FlightResponse> getAllFlights() {
         return flightService.getAllFlights();
     }
 
     // Get flight by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
+    public ResponseEntity<FlightResponse> getFlightById(@PathVariable Long id) {
         return flightService.getFlightById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,16 +34,16 @@ public class FlightController {
 
     // Create new flight
     @PostMapping
-    public Flight createFlight(@RequestBody Flight flight) {
+    public FlightResponse createFlight(@RequestBody Flight flight) {
         return flightService.saveFlight(flight);
     }
 
     // Update flight
     @PutMapping("/{id}")
-    public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
+    public ResponseEntity<FlightResponse> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
         return flightService.getFlightById(id)
                 .map(existing -> {
-                    flight.setId(existing.getId());
+                    flight.setId(existing.id());
                     return ResponseEntity.ok(flightService.saveFlight(flight));
                 })
                 .orElse(ResponseEntity.notFound().build());

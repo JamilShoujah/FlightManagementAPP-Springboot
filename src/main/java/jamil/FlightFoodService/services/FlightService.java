@@ -1,8 +1,10 @@
 package jamil.FlightFoodService.services;
 
 import jamil.FlightFoodService.models.Flight;
+import jamil.FlightFoodService.dto.FlightResponse;
 import jamil.FlightFoodService.repositories.FlightRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,21 +19,26 @@ public class FlightService {
     }
 
     // Get all flights
-    public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<FlightResponse> getAllFlights() {
+        return flightRepository.findAllFlightResponses();
     }
 
     // Get flight by ID
-    public Optional<Flight> getFlightById(Long id) {
-        return flightRepository.findById(id);
+    @Transactional(readOnly = true)
+    public Optional<FlightResponse> getFlightById(Long id) {
+        return flightRepository.findFlightResponseById(id);
     }
 
     // Create or update flight
-    public Flight saveFlight(Flight flight) {
-        return flightRepository.save(flight);
+    @Transactional
+    public FlightResponse saveFlight(Flight flight) {
+        Flight saved = flightRepository.save(flight);
+        return FlightResponse.fromEntity(saved);
     }
 
     // Delete flight
+    @Transactional
     public void deleteFlight(Long id) {
         flightRepository.deleteById(id);
     }

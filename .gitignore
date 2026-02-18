@@ -33,5 +33,12 @@ build/
 .vscode/
 node_modules/
 
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Oracle wallet files (local secrets)
+Wallet_*/
+
 # Env files
 .env
