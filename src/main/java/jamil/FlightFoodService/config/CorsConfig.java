@@ -1,19 +1,26 @@
-// src/main/java/com/yourapp/config/CorsConfig.java
 package jamil.FlightFoodService.config;
+
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig {
 
-    private final Environment env;
+    private static final String DEFAULT_ALLOWED_ORIGINS =
+            "http://localhost:4200,http://127.0.0.1:4200";
 
-    public CorsConfig(Environment env) {
-        this.env = env;
+    private final String[] allowedOrigins;
+
+    public CorsConfig(org.springframework.core.env.Environment env) {
+        String configuredOrigins = env.getProperty("app.cors.allowed-origins", DEFAULT_ALLOWED_ORIGINS);
+        this.allowedOrigins = Arrays.stream(configuredOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .toArray(String[]::new);
     }
 
     @Bean
@@ -21,23 +28,6 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-
-                String[] allowedOrigins;
-
-                // Set allowed origins based on active profile
-                String activeProfile = env.getActiveProfiles().length > 0 ? env.getActiveProfiles()[0] : "dev";
-
-                switch (activeProfile) {
-                    case "prod":
-                        allowedOrigins = new String[] { "https://myapp.com" }; // prod frontend
-                        break;
-                    case "staging":
-                        allowedOrigins = new String[] { "https://staging.myapp.com" };
-                        break;
-                    default: // dev
-                        allowedOrigins = new String[] { "http://localhost:4200" };
-                }
-
                 registry.addMapping("/**")
                         .allowedOrigins(allowedOrigins)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

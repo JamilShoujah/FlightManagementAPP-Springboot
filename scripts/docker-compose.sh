@@ -38,7 +38,15 @@ done
 
 if [ "$ENV_MODE" = "prod" ]; then
   COMPOSE_FILE="-f docker-compose.prod.yml"
-  ENV_FILE="--env-file .env.prod"
+  if [ -f "./env.prod.sh" ]; then
+    # Load exported production variables for docker compose interpolation.
+    . ./env.prod.sh
+  else
+    echo "Missing env.prod.sh" >&2
+    echo "Create / update env.prod.sh before running with --env=prod." >&2
+    exit 1
+  fi
+  ENV_FILE=""
 else
   COMPOSE_FILE=""
   ENV_FILE="--env-file .env.local"

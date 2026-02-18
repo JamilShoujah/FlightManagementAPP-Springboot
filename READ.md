@@ -13,7 +13,7 @@ Use the committed env files directly and edit values as needed.
 
 ```bash
 vi .env.local
-vi .env.prod
+vi env.prod.sh
 ```
 
 ### Local testing variables (`.env.local`)
@@ -27,15 +27,14 @@ POSTGRES_PASSWORD=flight_password
 POSTGRES_PORT=5432
 ```
 
-### Production / OCI variables (`.env.prod`)
+### Production / OCI variables (`env.prod.sh`)
 
-```dotenv
-SPRING_PROFILES_ACTIVE=prod
-SERVER_PORT=8080
-DB_URL=jdbc:postgresql://<oci-postgres-host>:5432/<database_name>?sslmode=require
-DB_USER=<db_user>
-DB_PASSWORD=<db_password>
-JPA_DDL_AUTO=validate
+```bash
+export DB_URL="jdbc:oracle:thin:@(description=...)"
+export DB_USER="ADMIN"
+export DB_PASSWORD='your_password'
+export SPRING_PROFILES_ACTIVE="prod"
+export SERVER_PORT=8080
 ```
 
 ## Run with Docker Compose
@@ -85,10 +84,11 @@ docker compose --env-file .env.local up --build
 ### Production-style run for OCI (backend only, external DB)
 
 ```bash
-docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+source env.prod.sh
+docker compose -f docker-compose.prod.yml up --build -d
 ```
 
-For OCI, set `.env.prod` with your managed PostgreSQL endpoint and credentials.
+Production compose now reads variables from your shell, loaded by `env.prod.sh`.
 
 ## Run without Docker
 
