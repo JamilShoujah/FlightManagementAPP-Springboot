@@ -21,16 +21,19 @@ public class FlightOrderService {
     }
 
     // Get all orders
+    @Transactional(readOnly = true)
     public List<FlightOrder> getAllOrders() {
-        return flightOrderRepository.findAll();
+        return flightOrderRepository.findAllWithFlightAndItems();
     }
 
     // Get order by ID
+    @Transactional(readOnly = true)
     public Optional<FlightOrder> getOrderById(Long id) {
-        return flightOrderRepository.findById(id);
+        return flightOrderRepository.findByIdWithFlightAndItems(id);
     }
 
     // Save or update an order
+    @Transactional
     public FlightOrder saveOrder(FlightOrder order) {
         if (order.getLastUpdated() == null) {
             order.setLastUpdated(LocalDateTime.now());
@@ -50,7 +53,7 @@ public class FlightOrderService {
 
     @Transactional
     public Optional<FlightOrder> updateOrder(Long id, FlightOrder incomingOrder) {
-        return flightOrderRepository.findById(id).map(existingOrder -> {
+        return flightOrderRepository.findByIdWithFlightAndItems(id).map(existingOrder -> {
             if (incomingOrder.getStatus() != null) {
                 existingOrder.setStatus(incomingOrder.getStatus());
             }
@@ -80,6 +83,7 @@ public class FlightOrderService {
     }
 
     // Delete order by ID
+    @Transactional
     public void deleteOrder(Long id) {
         flightOrderRepository.deleteById(id);
     }

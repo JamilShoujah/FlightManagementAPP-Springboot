@@ -9,15 +9,16 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER:oracle.jdbc.OracleDriver}
     hikari:
-      maximum-pool-size: ${DB_POOL_SIZE:8}
-      minimum-idle: ${DB_POOL_MIN_IDLE:1}
+      maximum-pool-size: ${DB_POOL_SIZE:4}
+      minimum-idle: ${DB_POOL_MIN_IDLE:0}
       connection-timeout: ${DB_CONN_TIMEOUT_MS:10000}
       validation-timeout: ${DB_VALIDATION_TIMEOUT_MS:5000}
-      idle-timeout: ${DB_IDLE_TIMEOUT_MS:300000}
-      max-lifetime: ${DB_MAX_LIFETIME_MS:840000}
+      idle-timeout: ${DB_IDLE_TIMEOUT_MS:180000}
+      max-lifetime: ${DB_MAX_LIFETIME_MS:600000}
       keepalive-time: ${DB_KEEPALIVE_TIME_MS:120000}
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: ${JPA_DDL_AUTO:validate}
     show-sql: false
@@ -25,9 +26,29 @@ spring:
       hibernate:
         dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.OracleDialect}
         format_sql: false
+        default_batch_fetch_size: ${HIBERNATE_DEFAULT_BATCH_FETCH_SIZE:50}
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          fetch_size: ${HIBERNATE_JDBC_FETCH_SIZE:100}
+          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:25}
+
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
 
 server:
   port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  compression:
+    enabled: true
+    min-response-size: 1KB
+    mime-types: application/json,application/xml,text/html,text/plain,text/css,application/javascript
+  tomcat:
+    threads:
+      max: ${TOMCAT_MAX_THREADS:30}
+      min-spare: ${TOMCAT_MIN_SPARE_THREADS:5}
+    accept-count: ${TOMCAT_ACCEPT_COUNT:100}
+    connection-timeout: ${TOMCAT_CONNECTION_TIMEOUT:10s}
 
 app:
   cors:
