@@ -27,6 +27,6 @@ services:
       TNS_ADMIN: ${WALLET_CONTAINER_PATH:-/app/wallet}
       JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:-} -Doracle.net.tns_admin=${WALLET_CONTAINER_PATH:-/app/wallet}
     volumes:
-      - ${WALLET_DIR:-./Wallet_TUC50B42BDEI3XAY}:${WALLET_CONTAINER_PATH:-/app/wallet}:ro
+      - ${WALLET_DIR:-./Wallet_WSAIDBATP}:${WALLET_CONTAINER_PATH:-/app/wallet}:ro
     ports:
       - "${SERVER_PORT:-8080}:8080"
