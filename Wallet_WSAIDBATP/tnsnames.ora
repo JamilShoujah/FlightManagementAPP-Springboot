@@ -1,0 +1,12 @@
+wsaidbatp_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g098039e6f5ade7_wsaidbatp_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+wsaidbatp_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g098039e6f5ade7_wsaidbatp_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+wsaidbatp_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g098039e6f5ade7_wsaidbatp_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+wsaidbatp_tp = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g098039e6f5ade7_wsaidbatp_tp.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+wsaidbatp_tpurgent = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g098039e6f5ade7_wsaidbatp_tpurgent.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+
