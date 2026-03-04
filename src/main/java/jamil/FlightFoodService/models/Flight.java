@@ -44,6 +44,7 @@ public class Flight {
     private LocalTime departureTime;
 
     @Column(name = "food_requested", nullable = false)
+    @Convert(converter = BooleanToNumberConverter.class)
     private Boolean foodRequested;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)

@@ -13,7 +13,7 @@ Use the committed env files directly and edit values as needed.
 
 ```bash
 vi .env.local
-vi env.prod.sh
+vi .env.prod
 ```
 
 ### Local testing variables (`.env.local`)
@@ -27,14 +27,18 @@ POSTGRES_PASSWORD=flight_password
 POSTGRES_PORT=5432
 ```
 
-### Production / OCI variables (`env.prod.sh`)
+### Production / OCI variables (`.env.prod`)
 
-```bash
-export DB_URL="jdbc:oracle:thin:@(description=...)"
-export DB_USER="ADMIN"
-export DB_PASSWORD='your_password'
-export SPRING_PROFILES_ACTIVE="prod"
-export SERVER_PORT=8080
+```dotenv
+DB_URL=jdbc:oracle:thin:@wsaidbatp_high
+DB_USER=ADMIN
+DB_PASSWORD=REPLACE_WITH_ADB_ADMIN_PASSWORD
+DB_DRIVER=oracle.jdbc.OracleDriver
+HIBERNATE_DIALECT=org.hibernate.dialect.OracleDialect
+SPRING_PROFILES_ACTIVE=prod
+SERVER_PORT=8080
+WALLET_DIR=./Wallet_WSAIDBATP
+WALLET_CONTAINER_PATH=/app/wallet
 ```
 
 ## Run with Docker Compose
@@ -88,7 +92,7 @@ source env.prod.sh
 docker compose -f docker-compose.prod.yml up --build -d
 ```
 
-Production compose now reads variables from your shell, loaded by `env.prod.sh`.
+Production compose reads variables from `.env.prod` via `env.prod.sh`.
 
 ## Run without Docker
 

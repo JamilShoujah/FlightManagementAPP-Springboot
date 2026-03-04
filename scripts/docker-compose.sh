@@ -38,15 +38,18 @@ done
 
 if [ "$ENV_MODE" = "prod" ]; then
   COMPOSE_FILE="-f docker-compose.prod.yml"
-  if [ -f "./env.prod.sh" ]; then
-    # Load exported production variables for docker compose interpolation.
-    . ./env.prod.sh
+  if [ -f "./.env.prod" ]; then
+    ENV_FILE="--env-file .env.prod"
   else
-    echo "Missing env.prod.sh" >&2
-    echo "Create / update env.prod.sh before running with --env=prod." >&2
+    echo "Missing .env.prod" >&2
+    echo "Create / update .env.prod before running with --env=prod." >&2
     exit 1
   fi
-  ENV_FILE=""
+
+  if [ -f "./env.prod.sh" ]; then
+    # Load defaults and validation (e.g., required DB_PASSWORD guard).
+    . ./env.prod.sh
+  fi
 else
   COMPOSE_FILE=""
   ENV_FILE="--env-file .env.local"
