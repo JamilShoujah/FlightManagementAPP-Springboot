@@ -72,6 +72,9 @@ export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:--XX:+UseG1GC -XX:+UseStringDedupl
 # Comma-separated allowed frontend origins for CORS.
 # For OCI deployment, replace/add your deployed frontend URL(s).
 export CORS_ALLOWED_ORIGINS="${CORS_ALLOWED_ORIGINS:-http://localhost:4200,http://127.0.0.1:4200}"
+if [ "${CORS_ALLOWED_ORIGINS}" = "http://localhost:4200,http://127.0.0.1:4200" ]; then
+  echo "Warning: CORS_ALLOWED_ORIGINS is still localhost-only. Set it to your deployed frontend origin(s)." >&2
+fi
 
 # Wallet mount used by docker-compose.prod.yml
 export WALLET_DIR="${WALLET_DIR:-./Wallet_WSAIDBATP}"

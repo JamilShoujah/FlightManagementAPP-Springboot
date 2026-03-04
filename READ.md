@@ -37,9 +37,13 @@ DB_DRIVER=oracle.jdbc.OracleDriver
 HIBERNATE_DIALECT=org.hibernate.dialect.OracleDialect
 SPRING_PROFILES_ACTIVE=prod
 SERVER_PORT=8080
+CORS_ALLOWED_ORIGINS=http://<OCI_PUBLIC_IP_OR_DOMAIN>:4200
 WALLET_DIR=./Wallet_WSAIDBATP
 WALLET_CONTAINER_PATH=/app/wallet
 ```
+
+Set `CORS_ALLOWED_ORIGINS` to the exact frontend URL(s) that will call the API, comma-separated.
+Example: `CORS_ALLOWED_ORIGINS=http://89.168.124.17:4200`
 
 ## Run with Docker Compose
 
